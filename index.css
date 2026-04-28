@@ -1,0 +1,24 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>URL Safety Analyzer</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="container">
+    <h1>🔍 URL Safety Analyzer</h1>
+
+    <input type="text" id="urlInput" placeholder="Enter URL here..." />
+    <button onclick="analyzeURL()">Analyze</button>
+
+    <div id="result" class="hidden">
+      <h2 id="status"></h2>
+      <p id="score"></p>
+      <ul id="details"></ul>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

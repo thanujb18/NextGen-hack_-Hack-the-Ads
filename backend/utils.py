@@ -94,4 +94,8 @@ def get_url_features(url):
         "is_https": 1 if "https" in url_str.lower() else 0,
         "suspicious_tld": has_suspicious_tld(url),
         "has_shortening": has_shortening_service(url)
+<<<<<<< HEAD
     }
+=======
+    }
+>>>>>>> e7e3aa30a48caabb3ba2da377b5b2cfa9562c957
