@@ -1,0 +1,72 @@
+import { useState } from "react";
+import axios from "axios";
+
+export default function App() {
+  const [text, setText] = useState("");
+  const [result, setResult] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  const analyzeAd = async () => {
+    setLoading(true);
+    try {
+      const res = await axios.post(
+        "http://localhost:5000/api/analyze", // ✅ FIXED URL
+        { text }
+      );
+      setResult(res.data);
+    } catch (err) {
+      console.error("ERROR:", err);
+      alert("Backend not connected!");
+    }
+    setLoading(false);
+  };
+
+  const getColor = () => {
+    if (!result) return "border-gray-500";
+    if (result.classification === "Safe") return "border-green-500";
+    if (result.classification === "Suspicious") return "border-yellow-500";
+    return "border-red-500";
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-900 text-white flex flex-col items-center p-6">
+      <h1 className="text-3xl font-bold mb-6">AdShield AI</h1>
+
+      <textarea
+        className="w-full max-w-xl p-4 rounded bg-gray-800 border border-gray-700"
+        rows="5"
+        placeholder="Paste advertisement text..."
+        value={text}
+        onChange={(e) => setText(e.target.value)}
+      />
+
+      <button
+        onClick={analyzeAd}
+        className="mt-4 px-6 py-2 bg-blue-600 rounded hover:bg-blue-700"
+      >
+        {loading ? "Analyzing..." : "Analyze Ad"}
+      </button>
+
+      {result && (
+        <div className={`mt-6 w-full max-w-xl p-4 rounded border ${getColor()}`}>
+          <h2 className="text-xl font-semibold">
+            {result.classification} ({Math.round(result.confidence * 100)}%)
+          </h2>
+
+          <p className="mt-2">Risk Level: {result.risk_level}</p>
+
+          <ul className="mt-3 list-disc ml-5">
+            {result.reasons.map((r, i) => (
+              <li key={i}>{r}</li>
+            ))}
+          </ul>
+
+          <p className="mt-3">
+            <strong>Highlighted:</strong>{" "}
+            {result.highlighted_text.join(", ")}
+          </p>
+        </div>
+      )}
+    </div>
+  );
+}
